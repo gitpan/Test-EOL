@@ -10,7 +10,7 @@ use File::Find;
 
 use vars qw( $VERSION $PERL $UNTAINT_PATTERN $PERL_PATTERN);
 
-$VERSION = '0.1';
+$VERSION = '0.2';
 
 $PERL    = $^X || 'perl';
 $UNTAINT_PATTERN  = qr|^([-+@\w./:\\]+)$|;
@@ -135,11 +135,12 @@ Test::EOL - Check the correct line endings in your project
 
 =head1 SYNOPSIS
 
-C<Test::EOL> lets you check the presence of tabs in your perl code. It
+C<Test::EOL> lets you check the presence of windows line endings in your
+perl code. It
 report its results in standard C<Test::Simple> fashion:
 
   use Test::EOL tests => 1;
-  eol_unix_ok( 'lib/Module.pm', 'Module is tab free');
+  eol_unix_ok( 'lib/Module.pm', 'Module is ^M free');
 
 Module authors can include the following in a t/eol.t and have C<Test::EOL>
 automatically find and check all perl files in a module distribution:
@@ -155,7 +156,7 @@ or
 =head1 DESCRIPTION
 
 This module scans your project/distribution for any perl files (scripts,
-modules, etc) for the presence of tabs.
+modules, etc) for the presence of windows line endings.
 
 =head1 EXPORT
 
