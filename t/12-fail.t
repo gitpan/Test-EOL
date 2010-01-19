@@ -126,7 +126,7 @@ test.pL -	A test script
 sub main {
 DUMMY
 
-print $fh qq{    print "Hello!\n";\n    }; # <-- whitespace
+print $fh qq{    print "Hello!\n";   \n}; # <-- whitespace
 print $fh '}';
 
   return $tmpdir;

@@ -10,7 +10,7 @@ use File::Find;
 
 use vars qw( $VERSION $PERL $UNTAINT_PATTERN $PERL_PATTERN);
 
-$VERSION = '0.5';
+$VERSION = '0.6';
 
 $PERL    = $^X || 'perl';
 $UNTAINT_PATTERN  = qr|^([-+@\w./:\\]+)$|;
@@ -78,7 +78,7 @@ sub eol_unix_ok {
         $line++;
         if (
            (!$options->{trailing_whitespace} && /\r$/) ||
-           ( $options->{trailing_whitespace} && /(\s|\r)$/)
+           ( $options->{trailing_whitespace} && /(\r|[ \t]+)$/)
         ) {
           $Test->ok(0, $test_txt . " on line $line");
           return 0;
