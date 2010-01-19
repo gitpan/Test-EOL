@@ -1,5 +1,8 @@
 Revision history for Test-NoTabs
 
+0.4  2010-01-19
+     - Add checks for trailing whitespace (fREW)
+
 0.3  2009-07-18
      - Fix File::Find regex which I had broken.
 
