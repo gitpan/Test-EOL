@@ -10,7 +10,7 @@ use File::Find;
 
 use vars qw( $VERSION $PERL $UNTAINT_PATTERN $PERL_PATTERN);
 
-$VERSION = '0.4';
+$VERSION = '0.5';
 
 $PERL    = $^X || 'perl';
 $UNTAINT_PATTERN  = qr|^([-+@\w./:\\]+)$|;
@@ -64,7 +64,8 @@ sub _all_files {
 
 sub eol_unix_ok {
     my $file = shift;
-    my $test_txt = shift if !ref $_[0];
+    my $test_txt;
+    $test_txt   = shift if !ref $_[0];
     $test_txt ||= "No windows line endings in '$file'";
     my $options = shift if ref $_[0] eq 'HASH';
     $options ||= {
@@ -86,7 +87,6 @@ sub eol_unix_ok {
     $Test->ok(1, $test_txt);
     return 1;
 }
-
 sub all_perl_files_ok {
     my $options = shift if ref $_[0] eq 'HASH';
     my @files = _all_perl_files( @_ );

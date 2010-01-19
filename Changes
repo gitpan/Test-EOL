@@ -1,5 +1,9 @@
 Revision history for Test-NoTabs
 
+0.5  2010-01-19
+     - Fix logic fail that made all filenames the same if a user uses the
+       trailing_whitespace option (fREW)
+
 0.4  2010-01-19
      - Add checks for trailing whitespace (fREW)
 
