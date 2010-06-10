@@ -1,21 +1,58 @@
-use inc::Module::Install 0.78;
 
-name     'Test-EOL';
-license  'perl';
-author   'Tomas Doran <bobtfish@bobtfish.net>';
+use strict;
+use warnings;
 
-all_from 'lib/Test/EOL.pm';
-requires 'Test::More';
-requires 'Test::Builder';
-requires 'File::Spec';
-requires 'FindBin';
-requires 'File::Find';
 
-resources repository => 'git://github.com/bobtfish/perl-test-eol.git';
 
-if ($Module::Install::AUTHOR) {
-    system("pod2text lib/Test/EOL.pm > README") and die;
+use ExtUtils::MakeMaker 6.31;
+
+
+
+my %WriteMakefileArgs = (
+  'ABSTRACT' => 'Check the correct line endings in your project',
+  'AUTHOR' => 'Tomas Doran <bobtfish@bobtfish.net>, Arthur Axel \'fREW\' Schmidt <frioux@gmail.com>, Kent Fredric <kentfredric@gmail.com>, Florian Ragwitz <rafl@debian.org>',
+  'BUILD_REQUIRES' => {
+    'File::Temp' => '0',
+    'Test::More' => '0'
+  },
+  'CONFIGURE_REQUIRES' => {
+    'ExtUtils::MakeMaker' => '6.31'
+  },
+  'DISTNAME' => 'Test-EOL',
+  'EXE_FILES' => [],
+  'LICENSE' => 'perl',
+  'NAME' => 'Test::EOL',
+  'PREREQ_PM' => {
+    'File::Find' => '0',
+    'File::Spec' => '0',
+    'FindBin' => '0',
+    'Test::Builder' => '0',
+    'vars' => '0'
+  },
+  'VERSION' => '0.8',
+  'test' => {
+    'TESTS' => 't/*.t'
+  }
+);
+
+
+unless ( eval { ExtUtils::MakeMaker->VERSION(6.56) } ) {
+  my $br = delete $WriteMakefileArgs{BUILD_REQUIRES};
+  my $pp = $WriteMakefileArgs{PREREQ_PM};
+  for my $mod ( keys %$br ) {
+    if ( exists $pp->{$mod} ) {
+      $pp->{$mod} = $br->{$mod} if $br->{$mod} > $pp->{$mod};
+    }
+    else {
+      $pp->{$mod} = $br->{$mod};
+    }
+  }
 }
 
-WriteAll;
+delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
+  unless eval { ExtUtils::MakeMaker->VERSION(6.52) };
+
+WriteMakefile(%WriteMakefileArgs);
+
+
 

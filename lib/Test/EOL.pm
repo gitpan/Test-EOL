@@ -1,4 +1,11 @@
 package Test::EOL;
+BEGIN {
+  $Test::EOL::AUTHORITY = 'cpan:FLORA';
+}
+BEGIN {
+  $Test::EOL::VERSION = '0.8';
+}
+# ABSTRACT: Check the correct line endings in your project
 
 use strict;
 use warnings;
@@ -8,9 +15,7 @@ use File::Spec;
 use FindBin qw($Bin);
 use File::Find;
 
-use vars qw( $VERSION $PERL $UNTAINT_PATTERN $PERL_PATTERN);
-
-$VERSION = '0.7';
+use vars qw( $PERL $UNTAINT_PATTERN $PERL_PATTERN);
 
 $PERL    = $^X || 'perl';
 $UNTAINT_PATTERN  = qr|^([-+@\w./:\\]+)$|;
@@ -62,6 +67,29 @@ sub _all_files {
     return @found;
 }
 
+# Formats various human invisible symbols
+# to similar visible ones.
+# Perhaps ^M or something like that
+# would be more appropriate?
+
+sub _show_whitespace {
+    my $string = shift;
+    $string =~ s/\r/[\\r]/g;
+    $string =~ s/\t/[\\t]/g;
+    $string =~ s/ /[\\s]/g;
+    return $string;
+}
+
+# Format a line record for diagnostics.
+
+sub _debug_line {
+    my ( $options, $line ) = @_;
+    $line->[2] =~ s/\n\z//g;
+    return "line $line->[1] : $line->[0] " . (
+      $options->{show_lines} ? qq{: } . _show_whitespace( $line->[2] )  : q{}
+    );
+}
+
 sub eol_unix_ok {
     my $file = shift;
     my $test_txt;
@@ -70,19 +98,38 @@ sub eol_unix_ok {
     my $options = shift if ref $_[0] eq 'HASH';
     $options ||= {
         trailing_whitespace => 0,
+        all_reasons => 0,
     };
     $file = _module_to_path($file);
+
     open my $fh, $file or do { $Test->ok(0, $test_txt); $Test->diag("Could not open $file: $!"); return; };
+    # Windows-- , default is :crlf, which hides \r\n  -_-
+    binmode( $fh, ':raw:utf8' );
     my $line = 0;
+    my @fails;
     while (<$fh>) {
         $line++;
-        if (
-           (!$options->{trailing_whitespace} && /\r$/) ||
-           ( $options->{trailing_whitespace} && /(\r|[ \t]+)$/)
-        ) {
-          $Test->ok(0, $test_txt . " on line $line");
-          return 0;
+        if ( !$options->{trailing_whitespace} && /(\r+)$/ ) {
+          my $match = $1;
+          push @fails, [ _show_whitespace( $match ) , $line , $_ ];
         }
+        if (  $options->{trailing_whitespace} && /([ \t]*\r+|[ \t]+)$/ ) {
+          my $match = $1;
+          push @fails, [ _show_whitespace($match), $line , $_ ];
+        }
+        # Minor short-circuit for people who don't need the whole file scanned
+        # once there's an err.
+        last if( @fails > 0 && !$options->{all_reasons} );
+    }
+    if( @fails ){
+       $Test->ok( 0, $test_txt . " on "  . _debug_line({ show_lines => 0 } , $fails[0]  )  );
+       if ( $options->{all_reasons} || 1 ){
+          $Test->diag( "  Problem Lines: ");
+          for ( @fails ){
+            $Test->diag(_debug_line({ show_lines => 1 } , $_ ) );
+          }
+       }
+       return 0;
     }
     $Test->ok(1, $test_txt);
     return 1;
@@ -136,7 +183,12 @@ sub _untaint {
 }
 
 1;
+
+
 __END__
+=pod
+
+=encoding utf-8
 
 =head1 NAME
 
@@ -182,11 +234,6 @@ or
 This module scans your project/distribution for any perl files (scripts,
 modules, etc) for the presence of windows line endings.
 
-=head1 EXPORT
-
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
-
 =head1 FUNCTIONS
 
 =head2 all_perl_files_ok( [ \%options ], [ @directories ] )
@@ -209,22 +256,10 @@ the total number of files tested must be specified.
 Run a unix EOL check on C<$file>. For a module, the path (lib/My/Module.pm) or the
 name (My::Module) can be both used.
 
-=head1 AUTHOR
+=head1 EXPORT
 
-Tomas Doran (t0m) C<< <bobtfish@bobtfish.net> >>
-
-=head1 BUGS
-
-Testing for EOL styles other than unix (\n) currently unsupported.
-
-The source code can be found on github, as listed in C< META.yml >,
-patches are welcome.
-
-Otherwise please report any bugs or feature requests to
-C<bug-test-eol at rt.cpan.org>, or through the web interface at
-L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Test-EOL>.
-I will be notified, and then you'll automatically be notified of progress on
-your bug as I make changes.
+A list of functions that can be exported.  You can delete this section
+if you don't export anything, such as for a purely object-oriented module.
 
 =head1 ACKNOWLEDGEMENTS
 
@@ -235,12 +270,34 @@ Shamelessly ripped off from L<Test::NoTabs>.
 L<Test::More>, L<Test::Pod>. L<Test::Distribution>, L<Test:NoWarnings>,
 L<Test::NoTabs>, L<Module::Install::AuthorTests>.
 
-=head1 COPYRIGHT & LICENSE
+=head1 AUTHORS
 
-Copyright 2009 Tomas Doran, some rights reserved.
+=over 4
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+=item *
+
+Tomas Doran <bobtfish@bobtfish.net>
+
+=item *
+
+Arthur Axel 'fREW' Schmidt <frioux@gmail.com>
+
+=item *
+
+Kent Fredric <kentfredric@gmail.com>
+
+=item *
+
+Florian Ragwitz <rafl@debian.org>
+
+=back
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2010 by Tomas Doran.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
 
 =cut
 
