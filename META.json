@@ -51,7 +51,7 @@
          "web" : "http://git.shadowcat.co.uk/gitweb/gitweb.cgi?p=catagits/Test-EOL.git;a=summary"
       }
    },
-   "version" : "0.8",
+   "version" : "0.9",
    "x_Dist_Zilla" : {
       "plugins" : [
          {

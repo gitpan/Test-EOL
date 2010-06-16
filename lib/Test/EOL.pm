@@ -3,7 +3,7 @@ BEGIN {
   $Test::EOL::AUTHORITY = 'cpan:FLORA';
 }
 BEGIN {
-  $Test::EOL::VERSION = '0.8';
+  $Test::EOL::VERSION = '0.9';
 }
 # ABSTRACT: Check the correct line endings in your project
 
@@ -151,7 +151,7 @@ sub _is_perl_script {
     my $file = shift;
     return 1 if $file =~ /\.pl$/i;
     return 1 if $file =~ /\.t$/;
-    open my $fh, $file or return;
+    open (my $fh, $file) or return;
     my $first = <$fh>;
     return 1 if defined $first && ($first =~ $PERL_PATTERN);
     return;
