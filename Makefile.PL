@@ -4,34 +4,37 @@ use warnings;
 
 
 
-use ExtUtils::MakeMaker 6.31;
+use ExtUtils::MakeMaker 6.30;
 
 
 
 my %WriteMakefileArgs = (
-  'ABSTRACT' => 'Check the correct line endings in your project',
-  'AUTHOR' => 'Tomas Doran <bobtfish@bobtfish.net>, Arthur Axel \'fREW\' Schmidt <frioux@gmail.com>, Kent Fredric <kentfredric@gmail.com>, Florian Ragwitz <rafl@debian.org>',
-  'BUILD_REQUIRES' => {
-    'File::Temp' => '0',
-    'Test::More' => '0'
+  "ABSTRACT" => "Check the correct line endings in your project",
+  "AUTHOR" => "Arthur Axel 'fREW' Schmidt <frioux\@gmail.com>, Florian Ragwitz <rafl\@debian.org>, Kent Fredric <kentfredric\@gmail.com>, Peter Rabbitson <ribasushi\@cpan.org>, Tomas Doran <bobtfish\@bobtfish.net>",
+  "BUILD_REQUIRES" => {
+    "Config" => 0,
+    "File::Temp" => 0,
+    "Test::More" => 0
   },
-  'CONFIGURE_REQUIRES' => {
-    'ExtUtils::MakeMaker' => '6.31'
+  "CONFIGURE_REQUIRES" => {
+    "ExtUtils::MakeMaker" => "6.30"
   },
-  'DISTNAME' => 'Test-EOL',
-  'EXE_FILES' => [],
-  'LICENSE' => 'perl',
-  'NAME' => 'Test::EOL',
-  'PREREQ_PM' => {
-    'File::Find' => '0',
-    'File::Spec' => '0',
-    'FindBin' => '0',
-    'Test::Builder' => '0',
-    'vars' => '0'
+  "DISTNAME" => "Test-EOL",
+  "EXE_FILES" => [],
+  "LICENSE" => "perl",
+  "NAME" => "Test::EOL",
+  "PREREQ_PM" => {
+    "File::Find" => 0,
+    "File::Spec" => 0,
+    "FindBin" => 0,
+    "Test::Builder" => 0,
+    "strict" => 0,
+    "vars" => 0,
+    "warnings" => 0
   },
-  'VERSION' => '0.9',
-  'test' => {
-    'TESTS' => 't/*.t'
+  "VERSION" => "1.0",
+  "test" => {
+    "TESTS" => "t/*.t"
   }
 );
 

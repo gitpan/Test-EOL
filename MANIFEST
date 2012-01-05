@@ -10,6 +10,7 @@ lib/Test/EOL.pm
 t/00-compile.t
 t/11-all.t
 t/12-fail.t
+t/13-latin1.t
 t/release-no-tabs.t
 t/release-pod-coverage.t
 t/release-pod-syntax.t

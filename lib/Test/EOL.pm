@@ -2,8 +2,8 @@ package Test::EOL;
 BEGIN {
   $Test::EOL::AUTHORITY = 'cpan:FLORA';
 }
-BEGIN {
-  $Test::EOL::VERSION = '0.9';
+{
+  $Test::EOL::VERSION = '1.0';
 }
 # ABSTRACT: Check the correct line endings in your project
 
@@ -85,7 +85,7 @@ sub _show_whitespace {
 sub _debug_line {
     my ( $options, $line ) = @_;
     $line->[2] =~ s/\n\z//g;
-    return "line $line->[1] : $line->[0] " . (
+    return "line $line->[1]: $line->[0] " . (
       $options->{show_lines} ? qq{: } . _show_whitespace( $line->[2] )  : q{}
     );
 }
@@ -94,7 +94,7 @@ sub eol_unix_ok {
     my $file = shift;
     my $test_txt;
     $test_txt   = shift if !ref $_[0];
-    $test_txt ||= "No windows line endings in '$file'";
+    $test_txt ||= "No incorrect line endings in '$file'";
     my $options = shift if ref $_[0] eq 'HASH';
     $options ||= {
         trailing_whitespace => 0,
@@ -104,7 +104,7 @@ sub eol_unix_ok {
 
     open my $fh, $file or do { $Test->ok(0, $test_txt); $Test->diag("Could not open $file: $!"); return; };
     # Windows-- , default is :crlf, which hides \r\n  -_-
-    binmode( $fh, ':raw:utf8' );
+    binmode( $fh, ':raw' );
     my $line = 0;
     my @fails;
     while (<$fh>) {
@@ -196,9 +196,9 @@ Test::EOL - Check the correct line endings in your project
 
 =head1 SYNOPSIS
 
-C<Test::EOL> lets you check the presence of windows line endings in your
-perl code. It
-report its results in standard C<Test::Simple> fashion:
+C<Test::EOL> lets you check for the presence of trailing whitespace and/or
+windows line endings in your perl code. It reports its results in standard
+C<Test::Simple> fashion:
 
   use Test::EOL tests => 1;
   eol_unix_ok( 'lib/Module.pm', 'Module is ^M free');
@@ -236,13 +236,33 @@ modules, etc) for the presence of windows line endings.
 
 =head1 FUNCTIONS
 
-=head2 all_perl_files_ok( [ \%options ], [ @directories ] )
+=head2 all_perl_files_ok
+
+  all_perl_files_ok( [ \%options ], [ @directories ] )
 
 Applies C<eol_unix_ok()> to all perl files found in C<@directories> (and sub
 directories). If no <@directories> is given, the starting point is one level
 above the current running script, that should cover all the files of a typical
 CPAN distribution. A perl file is *.pl or *.pm or *.t or a file starting
 with C<#!...perl>
+
+Valid C<\%options> currently are:
+
+=over
+
+=item * trailing_whitespace
+
+By default Test::EOL only looks for Windows (CR/LF) line-endings. Set this
+to true to raise errors if any kind of trailing whitespace is present in
+the file.
+
+=item * all_reasons
+
+Normally Test::EOL reports only the first error in every file (given that
+a text file originated on Windows will fail every single line). Set this
+a true value to register a test failure for every line with an error.
+
+=back
 
 If the test plan is defined:
 
@@ -251,10 +271,14 @@ If the test plan is defined:
 
 the total number of files tested must be specified.
 
-=head2 eol_unix_ok( $file [, $text] [, \%options ]  )
+=head2 eol_unix_ok
+
+  eol_unix_ok ( $file [, $text] [, \%options ] )
 
 Run a unix EOL check on C<$file>. For a module, the path (lib/My/Module.pm) or the
-name (My::Module) can be both used.
+name (My::Module) can be both used. C<$text> is the diagnostic label emited after
+the C<ok>/C<not ok> TAP output. C<\%options> takes the same values as described in
+L</all_perl_files_ok>.
 
 =head1 EXPORT
 
@@ -276,11 +300,11 @@ L<Test::NoTabs>, L<Module::Install::AuthorTests>.
 
 =item *
 
-Tomas Doran <bobtfish@bobtfish.net>
+Arthur Axel 'fREW' Schmidt <frioux@gmail.com>
 
 =item *
 
-Arthur Axel 'fREW' Schmidt <frioux@gmail.com>
+Florian Ragwitz <rafl@debian.org>
 
 =item *
 
@@ -288,13 +312,17 @@ Kent Fredric <kentfredric@gmail.com>
 
 =item *
 
-Florian Ragwitz <rafl@debian.org>
+Peter Rabbitson <ribasushi@cpan.org>
+
+=item *
+
+Tomas Doran <bobtfish@bobtfish.net>
 
 =back
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2010 by Tomas Doran.
+This software is copyright (c) 2012 by Tomas Doran.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
