@@ -3,7 +3,7 @@ BEGIN {
   $Test::EOL::AUTHORITY = 'cpan:FLORA';
 }
 {
-  $Test::EOL::VERSION = '1.0';
+  $Test::EOL::VERSION = '1.1';
 }
 # ABSTRACT: Check the correct line endings in your project
 
