@@ -1,12 +1,4 @@
 Changes
-LICENSE
-MANIFEST
-MANIFEST.bak
-META.json
-META.yml
-Makefile.PL
-README
-dist.ini
 inc/Module/Install.pm
 inc/Module/Install/Base.pm
 inc/Module/Install/Can.pm
@@ -16,10 +8,12 @@ inc/Module/Install/Metadata.pm
 inc/Module/Install/Win32.pm
 inc/Module/Install/WriteAll.pm
 lib/Test/EOL.pm
-t/00-compile.t
+Makefile.PL
+MANIFEST			This list of files
+META.yml
+README
+t/00-load.t
+t/04-pod.t
+t/05-pod-coverage.t
 t/11-all.t
 t/12-fail.t
-t/13-latin1.t
-t/release-no-tabs.t
-t/release-pod-coverage.t
-t/release-pod-syntax.t
