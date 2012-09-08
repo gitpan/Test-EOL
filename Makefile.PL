@@ -10,7 +10,7 @@ use ExtUtils::MakeMaker 6.30;
 
 my %WriteMakefileArgs = (
   "ABSTRACT" => "Check the correct line endings in your project",
-  "AUTHOR" => "Arthur Axel 'fREW' Schmidt <frioux\@gmail.com>, Florian Ragwitz <rafl\@debian.org>, Kent Fredric <kentfredric\@gmail.com>, Peter Rabbitson <ribasushi\@cpan.org>, Tomas Doran <bobtfish\@bobtfish.net>",
+  "AUTHOR" => "Arthur Axel 'fREW' Schmidt <frioux\@gmail.com>, Florian Ragwitz <rafl\@debian.org>, Kent Fredric <kentfredric\@gmail.com>, Peter Rabbitson <ribasushi\@cpan.org>, Tomas Doran <bobtfish\@bobtfish.net>, Olivier Mengue <dolmen\@cpan.org>",
   "BUILD_REQUIRES" => {
     "Config" => 0,
     "File::Temp" => 0,
@@ -32,7 +32,7 @@ my %WriteMakefileArgs = (
     "vars" => 0,
     "warnings" => 0
   },
-  "VERSION" => "1.3",
+  "VERSION" => "1.4",
   "test" => {
     "TESTS" => "t/*.t"
   }
