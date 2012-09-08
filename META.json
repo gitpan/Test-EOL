@@ -26,9 +26,9 @@
       },
       "runtime" : {
          "requires" : {
+            "Cwd" : "0",
             "File::Find" : "0",
             "File::Spec" : "0",
-            "FindBin" : "0",
             "Test::Builder" : "0",
             "strict" : "0",
             "vars" : "0",
@@ -39,6 +39,7 @@
          "requires" : {
             "Config" : "0",
             "File::Temp" : "0",
+            "FindBin" : "0",
             "Test::More" : "0"
          }
       }
@@ -56,7 +57,7 @@
          "web" : "http://git.shadowcat.co.uk/gitweb/gitweb.cgi?p=catagits/Test-EOL.git;a=summary"
       }
    },
-   "version" : "1.4",
+   "version" : "1.5",
    "x_Dist_Zilla" : {
       "plugins" : [
          {

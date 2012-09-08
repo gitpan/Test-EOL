@@ -10,6 +10,7 @@ author:
 build_requires:
   Config: 0
   File::Temp: 0
+  FindBin: 0
   Test::More: 0
 configure_requires:
   ExtUtils::MakeMaker: 6.30
@@ -21,9 +22,9 @@ meta-spec:
   version: 1.4
 name: Test-EOL
 requires:
+  Cwd: 0
   File::Find: 0
   File::Spec: 0
-  FindBin: 0
   Test::Builder: 0
   strict: 0
   vars: 0
@@ -32,7 +33,7 @@ resources:
   bugtracker: http://rt.cpan.org/Public/Dist/Display.html?Name=Test-EOL
   homepage: http://metacpan.org/release/Test-EOL
   repository: git://git.shadowcat.co.uk/catagits/Test-EOL.git
-version: 1.4
+version: 1.5
 x_Dist_Zilla:
   plugins:
     -

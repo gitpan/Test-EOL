@@ -14,6 +14,7 @@ my %WriteMakefileArgs = (
   "BUILD_REQUIRES" => {
     "Config" => 0,
     "File::Temp" => 0,
+    "FindBin" => 0,
     "Test::More" => 0
   },
   "CONFIGURE_REQUIRES" => {
@@ -24,15 +25,15 @@ my %WriteMakefileArgs = (
   "LICENSE" => "perl",
   "NAME" => "Test::EOL",
   "PREREQ_PM" => {
+    "Cwd" => 0,
     "File::Find" => 0,
     "File::Spec" => 0,
-    "FindBin" => 0,
     "Test::Builder" => 0,
     "strict" => 0,
     "vars" => 0,
     "warnings" => 0
   },
-  "VERSION" => "1.4",
+  "VERSION" => "1.5",
   "test" => {
     "TESTS" => "t/*.t"
   }
